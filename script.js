@@ -82,6 +82,7 @@ window.addTask = async function() {
             reminderTime: reminderTime
         });
         alert("Task added successfully!");
+         taskInput.value = '';
     } catch (error) {
        alert("Error adding task:", error);
     }
