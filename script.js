@@ -36,19 +36,19 @@ let currentUser = null;
 window.signIn = function() {
     signInWithPopup(auth, new GoogleAuthProvider())
         .then((result) => {
-            console.log("User signed in:", result.user);
+            alert("User signed in:", result.user);
         })
         .catch((error) => {
-            console.error("Error signing in:", error);
+            alert("Error signing in:", error);
         });
 }
 
 // Function to handle user sign-out
 window.signOutUser = function() {
     signOut(auth).then(() => {
-        console.log("User signed out");
+       alert("User signed out");
     }).catch((error) => {
-        console.error("Error signing out:", error);
+      alert("Error signing out:", error);
     });
 }
 
@@ -56,11 +56,11 @@ window.signOutUser = function() {
 onAuthStateChanged(auth, (user) => {
     if (user) {
         currentUser = user;
-        console.log("User is signed in:", user);
+       alert("User is signed in:", user);
         getTasksFromFirestore();
     } else {
         currentUser = null;
-        console.log("No user signed in");
+       alert("No user signed in");
         document.getElementById('task-list').innerHTML = ''; // Clear tasks
     }
 });
@@ -68,7 +68,7 @@ onAuthStateChanged(auth, (user) => {
 // Function to add a task to Firestore
 window.addTask = async function() {
     if (!currentUser) {
-        console.log("No user signed in");
+     alert(" sign in");
         return;
     }
 
@@ -81,16 +81,16 @@ window.addTask = async function() {
             task: taskInput,
             reminderTime: reminderTime
         });
-        console.log("Task added successfully!");
+        alert("Task added successfully!");
     } catch (error) {
-        console.error("Error adding task:", error);
+       alert("Error adding task:", error);
     }
 }
 
 // Function to update a task in Firestore
 window.editTask = async function(taskId, newTask, newReminderTime) {
     if (!currentUser) {
-        console.log("No user signed in");
+       alert("No user signed in");
         return;
     }
 
@@ -100,31 +100,31 @@ window.editTask = async function(taskId, newTask, newReminderTime) {
             task: newTask,
             reminderTime: newReminderTime
         });
-        console.log("Task updated successfully!");
+      alert("Task updated successfully!");
     } catch (error) {
-        console.error("Error updating task:", error);
+        alert("Error updating task:", error);
     }
 }
 
 // Function to delete a task from Firestore
 window.deleteTask = async function(taskId) {
     if (!currentUser) {
-        console.log("No user signed in");
+        alert("No user signed in");
         return;
     }
 
     try {
         const taskRef = doc(db, "tasks", taskId);
         await deleteDoc(taskRef);
-        console.log("Task deleted successfully!");
+       alert("Task deleted successfully!");
     } catch (error) {
-        console.error("Error deleting task:", error);
+        alert("Error deleting task:", error);
     }
 }
 
 function getTasksFromFirestore() {
     if (!currentUser) {
-        console.log("No user signed in");
+        alert("No user signed in");
         return;
     }
 
