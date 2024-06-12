@@ -68,12 +68,15 @@ onAuthStateChanged(auth, (user) => {
 // Function to add a task to Firestore
 window.addTask = async function() {
     if (!currentUser) {
-     alert(" sign in");
+        alert("Please sign in");
         return;
     }
 
-    const taskInput = document.getElementById('task-input').value;
-    const reminderTime = document.getElementById('reminder-time').value;
+    const taskInputElement = document.getElementById('task-input');
+    const reminderTimeElement = document.getElementById('reminder-time');
+    
+    const taskInput = taskInputElement.value;
+    const reminderTime = reminderTimeElement.value;
     
     try {
         await addDoc(collection(db, "tasks"), {
@@ -82,11 +85,13 @@ window.addTask = async function() {
             reminderTime: reminderTime
         });
         alert("Task added successfully!");
-         taskInput.value = '';
+        taskInputElement.value = ''; // Clear the task input field
+        reminderTimeElement.value = ''; // Clear the reminder time input field if needed
     } catch (error) {
-       alert("Error adding task:", error);
+        alert("Error adding task: " + error.message);
     }
 }
+
 
 // Function to update a task in Firestore
 window.editTask = async function(taskId, newTask, newReminderTime) {
