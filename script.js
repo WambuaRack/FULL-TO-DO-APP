@@ -15,15 +15,26 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+const db = getFirestore(app);
+
+// Set SameSite=None and Secure for authentication cookies
+const browserSessionPersistence = browserSessionPersistenceFromUrl();
+auth.setPersistence(browserSessionPersistence);
+
+// Function to set browser session persistence with appropriate SameSite settings
+function browserSessionPersistenceFromUrl() {
+  const url = window.location.href;
+  const isSecureContext = url.startsWith("https:");
+  // Set SameSite=None and Secure for HTTPS contexts, otherwise, set to 'None'
+  return isSecureContext ? "none" : "lax";
+}
 
 let currentUser = null;
 
 // Function to handle user sign-in
 window.signIn = function() {
-    signInWithPopup(auth, provider)
+    signInWithPopup(auth, new GoogleAuthProvider())
         .then((result) => {
             console.log("User signed in:", result.user);
         })
@@ -148,7 +159,6 @@ function getTasksFromFirestore() {
         console.error("Error fetching tasks:", error);
     });
 }
-
 
 // Authentication UI
 const authUI = document.getElementById('auth-ui');
